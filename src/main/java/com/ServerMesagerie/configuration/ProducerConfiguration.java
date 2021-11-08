@@ -1,5 +1,7 @@
 package com.ServerMesagerie.configuration;
 
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.ListTopicsOptions;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -12,6 +14,8 @@ import org.springframework.kafka.core.ProducerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 @Configuration
 public class ProducerConfiguration {
@@ -49,5 +53,19 @@ public class ProducerConfiguration {
                 .replicas(1)
                 .build();
     }
+
+    @Bean
+    public Set<String> getListOfTopic() throws ExecutionException, InterruptedException {
+
+        AdminClient adminClient = AdminClient.create(producerConfig());
+        ListTopicsOptions listTopicsOptions = new ListTopicsOptions();
+        listTopicsOptions.listInternal(true);
+
+        //System.out.println("topics:" + adminClient.listTopics(listTopicsOptions).names().get());
+
+        return adminClient.listTopics(listTopicsOptions).names().get();
+    }
+
+
 
 }
