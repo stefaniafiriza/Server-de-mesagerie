@@ -1,5 +1,6 @@
 package com.ServerMesagerie.controler;
 
+import com.ServerMesagerie.consumer.Messages;
 import com.ServerMesagerie.consumer.TopicConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -17,28 +18,32 @@ import java.util.Set;
 public class KafkaController {
 
     @Autowired
-    private KafkaTemplate<String, String> template;
+    private KafkaTemplate<String, Object> template;
     private TopicConsumer topicConsumer;
 
-    public KafkaController(KafkaTemplate<String, String> template, TopicConsumer topicConsumer) {
+    public KafkaController(KafkaTemplate<String, Object> template, TopicConsumer topicConsumer) {
         this.template = template;
         this.topicConsumer = topicConsumer;
     }
 
     @GetMapping("/producer")
-    public void producer(@RequestParam String message) {
-        ListenableFuture<SendResult<String, String>> future = template.send("myTopic", message);
+    public void producer(
+            @RequestParam ("destination") String destination,
+            @RequestParam("textMessage") String textMessage
+            ) {
+        Messages message = new Messages(destination,textMessage);
+        ListenableFuture<SendResult<String, Object>> future = template.send("myTopic", message);
 
-        future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+        future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
             @Override
-            public void onSuccess(SendResult<String, String> result) {
-                System.out.println("Sent message=[" + message +
+            public void onSuccess(SendResult<String, Object> result) {
+                System.out.println("Sent message=[" + message.getTextMessage() +
                         "] with offset=[" + result.getRecordMetadata().offset() + "]");
             }
             @Override
             public void onFailure(Throwable ex) {
                 System.out.println("Unable to send message=["
-                        + message + "] due to : " + ex.getMessage());
+                        + message.getTextMessage() + "] due to : " + ex.getMessage());
             }
         });
     }
