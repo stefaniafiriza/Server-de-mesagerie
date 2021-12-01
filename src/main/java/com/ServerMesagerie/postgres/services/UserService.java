@@ -4,6 +4,7 @@ import com.ServerMesagerie.dtos.UserDTO;
 import com.ServerMesagerie.models.Permission;
 import com.ServerMesagerie.models.User;
 import com.ServerMesagerie.postgres.repositories.UserRepository;
+import com.ServerMesagerie.security.Hmac512PasswordEncoder;
 import com.ServerMesagerie.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +27,7 @@ public class UserService implements UserManager, UserDetailsService {
     @Value("${password.salt}")
     private String salt;
 
-    //TODO use an encoder for the password - maybe Hmac512
+    Hmac512PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -34,7 +35,7 @@ public class UserService implements UserManager, UserDetailsService {
 
     @PostConstruct
     private void createAdminUser() {
-        //TODO encode the password
+        passwordEncoder = new Hmac512PasswordEncoder(salt);
     }
 
     @Override
@@ -62,7 +63,8 @@ public class UserService implements UserManager, UserDetailsService {
     public UserDTO save(User user) {
         try {
             user.getPermissions().add(Permission.ROLE_USER);
-            //TODO encode the password
+            String encodePassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodePassword);
             userRepository.save(user);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
