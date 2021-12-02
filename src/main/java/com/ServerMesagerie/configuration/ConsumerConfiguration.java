@@ -1,6 +1,6 @@
 package com.ServerMesagerie.configuration;
 
-import com.ServerMesagerie.consumer.Messages;
+//import com.ServerMesagerie.consumer.Messages;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -34,15 +34,15 @@ public class ConsumerConfiguration {
         configurations.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configurations.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         configurations.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);
-        configurations.put(JsonDeserializer.VALUE_DEFAULT_TYPE, Messages.class);
+       // configurations.put(JsonDeserializer.VALUE_DEFAULT_TYPE, Messages.class);
 
         return configurations;
     }
 
-    @Bean
-    ConcurrentKafkaListenerContainerFactory<String, Messages> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Messages> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        return factory;
-    }
+//    @Bean
+//    ConcurrentKafkaListenerContainerFactory<String, Messages> kafkaListenerContainerFactory() {
+//        ConcurrentKafkaListenerContainerFactory<String, Messages> factory = new ConcurrentKafkaListenerContainerFactory<>();
+//        factory.setConsumerFactory(consumerFactory());
+//        return factory;
+//    }
 }
