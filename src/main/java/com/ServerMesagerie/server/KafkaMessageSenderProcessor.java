@@ -40,7 +40,7 @@ public class KafkaMessageSenderProcessor {
 
     public void startProducing(Message message) {
         try {
-            messageProducer.send(new ProducerRecord<>(kafkaUtils.messageTopicStorage, message.receiverUserId.toString(), message));
+            messageProducer.send(new ProducerRecord<>(kafkaUtils.messageTopicStorage, message.conversationId.toString(), message));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

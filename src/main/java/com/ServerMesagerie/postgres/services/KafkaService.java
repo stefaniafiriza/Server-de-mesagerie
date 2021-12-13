@@ -1,5 +1,6 @@
 package com.ServerMesagerie.postgres.services;
 
+import com.ServerMesagerie.models.Conversation;
 import com.ServerMesagerie.models.Message;
 import com.ServerMesagerie.models.User;
 import com.ServerMesagerie.postgres.repositories.KafkaMessageRepository;
@@ -16,8 +17,8 @@ public class KafkaService implements KafkaServiceManager {
         this.kafkaMessageRepository = kafkaMessageRepository;
     }
 
-    public List<Message> loadAllMessagesForUser(User senderId, User receiverId) {
-        return kafkaMessageRepository.findAllBySenderUserIdAndReceiverUserIdOrderById(senderId, receiverId);
+    public List<Message> loadAllMessagesForConversation(Conversation conversation) {
+        return kafkaMessageRepository.findAllByConversationIdOrderById(conversation);
     }
 
     @Override

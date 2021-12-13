@@ -18,15 +18,18 @@ public class UserDTO {
 
     public Set<Permission> permissions = new HashSet<>();
 
+    public boolean available;
+
     public UserDTO(){}
 
-    public UserDTO(Long userId, String username, String password, String firstName, String lastName, Set<Permission> permissions) {
+    public UserDTO(Long userId, String username, String password, String firstName, String lastName, Set<Permission> permissions, boolean available) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.permissions = permissions;
+        this.available = available;
     }
 
     public Long getUserId() {

@@ -11,13 +11,13 @@ public class Message implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "conversationId", referencedColumnName = "conversation_id")
+    public Conversation conversationId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sender_id", referencedColumnName = "user_id")
     public User senderUserId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id", referencedColumnName = "user_id")
-    public User receiverUserId;
 
     @Column(name = "message")
     public String message;
@@ -27,10 +27,10 @@ public class Message implements Serializable {
 
     public Message(){}
 
-    public Message(Long id, User senderUserId, User receiverUserId, String message, Long time) {
+    public Message(Long id, User senderUserId,Conversation conversationId, String message, Long time) {
         this.id = id;
         this.senderUserId = senderUserId;
-        this.receiverUserId = receiverUserId;
+        this.conversationId = conversationId;
         this.message = message;
         this.time = time;
     }

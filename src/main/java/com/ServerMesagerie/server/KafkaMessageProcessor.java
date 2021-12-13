@@ -1,5 +1,6 @@
 package com.ServerMesagerie.server;
 
+import com.ServerMesagerie.models.Conversation;
 import com.ServerMesagerie.models.Message;
 import com.ServerMesagerie.models.User;
 import com.ServerMesagerie.postgres.services.KafkaServiceManager;
@@ -51,18 +52,12 @@ public class KafkaMessageProcessor {
         consumer.subscribe(topics);
     }
 
-    public List<Message> loadFromDB(User senderId, User receiverId) {
+    public List<Message> loadFromDB(Conversation conversation) {
         List<Message> conversationMessageList = new ArrayList<>();
 
-        List<Message> receiverMessageList;
-        List<Message> senderMessageList;
-
         try {
-            receiverMessageList = kafkaServiceManager.loadAllMessagesForUser(receiverId, senderId);
-            senderMessageList = kafkaServiceManager.loadAllMessagesForUser(senderId, receiverId);
+            conversationMessageList = kafkaServiceManager.loadAllMessagesForConversation(conversation);
 
-            conversationMessageList.addAll(senderMessageList);
-            conversationMessageList.addAll(receiverMessageList);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

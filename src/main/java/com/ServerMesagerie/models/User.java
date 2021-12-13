@@ -43,12 +43,8 @@ public class User implements UserDetails {
     )
     Set<Message> sentMessages = new HashSet<>();
 
-    @OneToMany(
-            mappedBy = "receiverUserId",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    Set<Message> receivedMessages = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<Conversation> conversations = new HashSet<>();
 
     public User(){}
 

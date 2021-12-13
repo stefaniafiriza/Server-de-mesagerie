@@ -2,6 +2,7 @@ package com.ServerMesagerie.utils;
 
 import com.ServerMesagerie.dtos.UserDTO;
 import com.ServerMesagerie.models.User;
+import com.ServerMesagerie.server.AvailableUsers;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
@@ -17,7 +18,8 @@ public class UserUtils {
                 user.getPassword(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getPermissions());
+                user.getPermissions(),
+                AvailableUsers.getInstance().isAvailable(user.getUserId()));
     }
 
     public static User userMapper(UserDTO userDTO) {
