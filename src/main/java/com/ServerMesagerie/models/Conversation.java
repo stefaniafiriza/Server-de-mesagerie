@@ -1,6 +1,7 @@
 package com.ServerMesagerie.models;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,10 @@ public class Conversation {
     @Column(name="conversation_id")
     public Long id;
 
+    @Column(name="name")
+    public String name;
+
     @ManyToMany(fetch = FetchType.EAGER)
-    public Set<User> conversationUserId;
+    public Set<User> users = new HashSet<>();
 
 }
